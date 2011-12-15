@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+/* test comment added */
 var logApp = logApp || (function(){
     
     //Class Definitions
@@ -107,7 +107,7 @@ var logApp = logApp || (function(){
 
             , listTemplate: _.template($('#log-list-template').html())
             
-            , listTemplate: _.template($('#log-head-template').html())
+            , headTemplate: _.template($('#log-head-template').html())
            
 
             // Delegated events for creating new items, and clearing completed ones.
