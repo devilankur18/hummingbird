@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/1.0.1/require.min.js" ></script> --->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js" ></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js" ></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>
+
+<!--    <script src="http://localhost:8000/socket.io/socket.io.js"></script>-->
+<!--    <script>
+    WEB_SOCKET_SWF_LOCATION = 'http://localhost:8000/socket.io/WebSocketMain.swf';
+    </script>-->
+
+<!--    <script src="/js/helpers.js"></script>
+
+    <script src="/js/websocket.js"></script>
+    <script src="/js/polymaps.js"></script>
+    <script src="/js/polymaps-extras.js"></script>
+
+    <script src="/js/widgets/base.js"></script>
+    <script src="/js/widgets/logger.js"></script>
+    <script src="/js/widgets/graph.js"></script>
+    <script src="/js/widgets/count.js"></script>
+    <script src="/js/widgets/map.js"></script>
+-->
+    <script src="./js/widgets/logApp.js"></script>
+    <title>Hummingbird</title>
+
+<!--    <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+
+    <link rel="stylesheet" media="all" href="/css/main.css" />
+    <link rel="stylesheet" media="all" href="/css/map.css" />
+    <link rel="stylesheet" media="all" href="/css/weekly.css" />-->
+</head>
+
+<body>
+
+  <h1>Hummingbird</h1>
+
+  <div id="logapp">
+      <div class="logapp-header">
+          <h1>Log App</h1>
+      </div>
+      <div class="logapp-body"></div>
+      <div class="logapp-footer"></div>
+  </div>
+  
+  <div style="clear: both;"></div>
+  
+   <!-- Templates -->
+
+    <script type="text/template" id="log-template">
+        <div>
+            <div class="<%= type %>">     
+                <%= message %>
+            </div>
+            <div class="ip"><%= ip %></div>
+            <div class="ua"><%= userAgent %></div>
+            <div class="platform"><%= platform %></div>
+        </div>
+    </script>
+
+   <script type="text/template" id="log-list-template">
+       <div></div>
+    </script>
+   
+    <script type="text/template" id="log-stats-template">
+        <div >Stats are as follows</div>
+    </script>
+
+</body>
+</html>
