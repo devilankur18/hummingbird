@@ -98,7 +98,7 @@ var logApp = logApp || (function(){
             // the App already present in the HTML.
             el: $("#logapp")
 
-            , elHeady: $("#logapp .logapp-header")
+            , elHeader: $("#logapp .logapp-header")
             , elBody: $("#logapp .logapp-body")
             , elFooter: $("#logapp .logapp-footer")
 
@@ -106,6 +106,9 @@ var logApp = logApp || (function(){
             , statsTemplate: _.template($('#log-stats-template').html())
 
             , listTemplate: _.template($('#log-list-template').html())
+            
+            , listTemplate: _.template($('#log-head-template').html())
+           
 
             // Delegated events for creating new items, and clearing completed ones.
             , events: {
@@ -124,13 +127,13 @@ var logApp = logApp || (function(){
             // Re-rendering the App just means refreshing the statistics -- the rest
             // of the app doesn't change.
             , render: function() {
-              this.elHeader.html(this.listTemplate()); 
+              this.elHeader.html(); 
               this.elFooter.html(this.statsTemplate({
 //                total:      Todos.length,
 //                done:       Todos.done().length,
 //                remaining:  Todos.remaining().length
               }));
-              
+              return this;
             }
 
             // Add a single todo item to the list by creating a view for it, and
@@ -179,6 +182,12 @@ var logApp = logApp || (function(){
 
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView;
+            logAppViewObj.render();
+            addData([
+                {id:1,timestamp:'123123123',type:'log',message:'This is log'}
+                , {id:2,timestamp:'2223123123',type:'error',message:'This is error'}
+                , {id:3,timestamp:'333333333',type:'warning',message:'This is warning'}
+            ])
         });
     }
     
@@ -193,8 +202,3 @@ var logApp = logApp || (function(){
 })()
     
 logApp.init();
-logApp.addData([
-    {id:1,timestamp:'123123123',type:'log',message:'This is log'}
-    , {id:2,timestamp:'2223123123',type:'error',message:'This is error'}
-    , {id:3,timestamp:'333333333',type:'warning',message:'This is warning'}
-])
