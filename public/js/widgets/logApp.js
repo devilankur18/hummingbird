@@ -183,11 +183,15 @@ var logApp = logApp || (function(){
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView;
             logAppViewObj.render();
-            addData([
-                {id:1,timestamp:'123123123',type:'log',message:'This is log'}
-                , {id:2,timestamp:'2223123123',type:'error',message:'This is error'}
-                , {id:3,timestamp:'333333333',type:'warning',message:'This is warning'}
-            ])
+			setInterval("fetchData()",1000);
+			function fetchData(){
+				addData("asdsad");
+			}
+            //addData([
+             //   {id:1,timestamp:'123123123',type:'log',message:'This is log'}
+              //  , {id:2,timestamp:'2223123123',type:'error',message:'This is error'}
+               // , {id:3,timestamp:'333333333',type:'warning',message:'This is warning'}
+            //])
         });
     }
     
