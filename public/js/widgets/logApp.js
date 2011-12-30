@@ -15,6 +15,9 @@ var logApp = logApp || (function(){
     //Objects
     var logCollectionObj;
     var logAppViewObj;
+	var typeError = true;
+	var typeWarning = true;
+	var typeLog = false;
     
     function logApp(){
        
@@ -138,21 +141,22 @@ var logApp = logApp || (function(){
 
             // Add a single todo item to the list by creating a view for it, and
             // appending its element to the `<ul>`.
-			, count : 0
+			, count : 1
 			
             , addOne: function(todo) {
 			  //this.count++;
 			 // debugger;
-			  todo.set({count:logCollectionObj.length});
-			  console.log(todo);
-			  if(logCollectionObj.length > 10){
-				//this.removeOne(logCollectionObj.length - 10);
-			  }
-			  var view = new logView({model: todo});
-			  //if(todo.get("title"))
-			  {
-				this.eltable.append(view.render().el);
-			  }	
+			 
+			 if((typeError&&(todo.get("type")=="error"))||(typeWarning&&(todo.get("type")=="warning"))||(typeLog)&&(todo.get("type")=="log"))
+				{
+				  todo.set({count:this.count++});
+				  /* console.log(todo);
+				  if(logCollectionObj.length > 10){
+					//this.removeOne(logCollectionObj.length - 10);
+				  } */
+				  var view = new logView({model: todo});
+				  this.eltable.append(view.render().el);
+				}
             }
 			, removeOne: function(idx) {
 				
@@ -211,6 +215,9 @@ var logApp = logApp || (function(){
     return {
         init: init
         , addData: addData
+		, typeError: typeError
+		, typeWarning: typeWarning
+		, typeLog: typeLog
     }
 })()
 console.log(logApp);
