@@ -142,14 +142,17 @@ var logApp = logApp || (function(){
 			
             , addOne: function(todo) {
 			  //this.count++;
-			  debugger;
+			 // debugger;
 			  todo.set({count:logCollectionObj.length});
 			  console.log(todo);
 			  if(logCollectionObj.length > 10){
-				this.removeOne(logCollectionObj.length - 10);
+				//this.removeOne(logCollectionObj.length - 10);
 			  }
 			  var view = new logView({model: todo});
-			  this.eltable.append(view.render().el);
+			  //if(todo.get("title"))
+			  {
+				this.eltable.append(view.render().el);
+			  }	
             }
 			, removeOne: function(idx) {
 				
@@ -196,7 +199,7 @@ var logApp = logApp || (function(){
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView;
             logAppViewObj.render();
-            var returnId = setInterval( "logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:'2223123123',type:'error',message:'This is error'},{id:3,timestamp:'333333333',type:'warning',message:'This is warning'}])",1000 );
+            var returnId = setInterval( "logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])",1000 );
 			//[{id:1,timestamp:'123123123',type:'log',message:'This is log'},{id:2,timestamp:'2223123123',type:'error',message:'This is error'},{id:3,timestamp:'333333333',type:'warning',message:'This is warning'}]
         });
     }

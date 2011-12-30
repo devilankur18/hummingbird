@@ -62,14 +62,12 @@
 	
 	
     <script type="text/template" id="logModel-template">
-        <div>
-		    <div class="counter"><%= count %></div>
-            <div class="<%= type %>">     
-                <%= message %>
-            </div>
-			<div class="ip"><%= timestamp %></div>
-            <div class="ua"><%= userAgent %></div>
-            <div class="platform"><%= platform %></div>
+        <div id="<%= count%>">
+            <div class="counter" style="display: inline ; color:#F8EFFB "><%= count %></div>
+            <div class="ip" style="display: inline">[<%= timestamp %>]</div>
+            <div class="<%= type %>" style="display: inline"><%= message %></div>
+            <div class="ua" style="display: inline"><%= userAgent %></div>
+            <div class="platform" style="display: inline"><%= platform %></div>
         </div>
     </script>
 	</div>
