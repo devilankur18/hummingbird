@@ -4,7 +4,7 @@
  */
 /* test comment added */
  
-var logApp = logApp || (function(){
+var logApp = logApp || (function(w,d,$){
     
     //Class Definitions
     var logModel;
@@ -15,9 +15,23 @@ var logApp = logApp || (function(){
     //Objects
     var logCollectionObj;
     var logAppViewObj;
-	var typeError = true;
-	var typeWarning = true;
-	var typeLog = false;
+    
+    var defaults = {
+        error: true
+        , warning: false
+        , log: false
+    }
+    
+    var config = {
+    };
+    
+    function getConfig(o){
+        return config;
+    }
+    
+    function setConfig(o){
+        config = $.extend({}, defaults, config, o);
+    }
     
     function logApp(){
        
@@ -144,24 +158,23 @@ var logApp = logApp || (function(){
 			, count : 1
 			
             , addOne: function(todo) {
-			  //this.count++;
-			 // debugger;
-			 
-			 if((typeError&&(todo.get("type")=="error"))||(typeWarning&&(todo.get("type")=="warning"))||(typeLog)&&(todo.get("type")=="log"))
-				{
-				  todo.set({count:this.count++});
-				  /* console.log(todo);
-				  if(logCollectionObj.length > 10){
-					//this.removeOne(logCollectionObj.length - 10);
-				  } */
-				  var view = new logView({model: todo});
-				  this.eltable.append(view.render().el);
-				}
+                  //this.count++;
+                 // debugger;
+//                 if((typeError&&(todo.get("type")=="error"))||(typeWarning&&(todo.get("type")=="warning"))||(typeLog)&&(todo.get("type")=="log")){
+                 if( config[todo.get("type")] ){
+                      todo.set({count:this.count++});
+                      /* console.log(todo);
+                      if(logCollectionObj.length > 10){
+                            //this.removeOne(logCollectionObj.length - 10);
+                      } */
+                      var view = new logView({model: todo});
+                      this.eltable.append(view.render().el);
+                }
             }
-			, removeOne: function(idx) {
-				
-				$('#'+idx).empty();
-			}
+            , removeOne: function(idx) {
+
+                    $('#'+idx).empty();
+            }
 
             // Add all items in the **Todos** collection at once.
             , addAll: function() {
@@ -194,8 +207,9 @@ var logApp = logApp || (function(){
 
     }
     
-    function init(){
+    function init(o){
       
+        setConfig(o);
         //Attach functions to be executed at ready Event Handler
         $(document).ready(function(){
             logApp();
@@ -209,16 +223,15 @@ var logApp = logApp || (function(){
     }
     
     function addData(data){
-		logCollectionObj.add(data);
+        logCollectionObj.add(data);
     }
     
     return {
         init: init
         , addData: addData
-		, typeError: typeError
-		, typeWarning: typeWarning
-		, typeLog: typeLog
+        , setConfig: setConfig
+        , getConfig: getConfig
     }
-})()
+})(window, document, jQuery)
 console.log(logApp);
 logApp.init();
