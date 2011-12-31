@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 /* test comment added */
+ 
 var logApp = logApp || (function(){
     
     //Class Definitions
@@ -16,7 +17,7 @@ var logApp = logApp || (function(){
     var logAppViewObj;
     
     function logApp(){
-        
+       
         //Basic Log Model 
         logModel = Backbone.Model.extend({
 
@@ -68,7 +69,7 @@ var logApp = logApp || (function(){
             tagName:  "div"
 
             // Cache the template function for a single item.
-            , template: _.template($('#log-template').html())
+            , template: _.template($('#logModel-template').html())
 
             // The DOM events specific to an item.
             , events: {
@@ -101,7 +102,8 @@ var logApp = logApp || (function(){
             , elHeader: $("#logapp .logapp-header")
             , elBody: $("#logapp .logapp-body")
             , elFooter: $("#logapp .logapp-footer")
-
+			, eltable: $("#logTable")
+			 
             // Our template for the line of statistics at the bottom of the app.
             , statsTemplate: _.template($('#log-stats-template').html())
 
@@ -122,32 +124,43 @@ var logApp = logApp || (function(){
               logCollectionObj.bind('add',   this.addOne, this);
               logCollectionObj.bind('reset', this.addAll, this);
               logCollectionObj.bind('all',   this.render, this);
+			  logCollectionObj.bind('remove', this.removeOne, this);
+			  
             }
 
             // Re-rendering the App just means refreshing the statistics -- the rest
             // of the app doesn't change.
             , render: function() {
-              this.elHeader.html(); 
-              this.elFooter.html(this.statsTemplate({
-//                total:      Todos.length,
-//                done:       Todos.done().length,
-//                remaining:  Todos.remaining().length
-              }));
+              this.elHeader.html(this.statsTemplate); 
+              this.elFooter.html();
               return this;
             }
 
             // Add a single todo item to the list by creating a view for it, and
             // appending its element to the `<ul>`.
+			, count : 0
+			
             , addOne: function(todo) {
-              var view = new logView({model: todo});
-              this.elBody.append(view.render().el);
+			  //this.count++;
+			  debugger;
+			  todo.set({count:logCollectionObj.length});
+			  console.log(todo);
+			  if(logCollectionObj.length > 10){
+				this.removeOne(logCollectionObj.length);
+			  }
+			  var view = new logView({model: todo});
+			  this.eltable.append(view.render().el);
             }
+			, removeOne: function(idx) {
+				$('#logTable:nth-child(idx)').empty();
+				
+			  }
 
             // Add all items in the **Todos** collection at once.
             , addAll: function() {
               logCollectionObj.each(this.addOne);
             }
-
+/*
             // If you hit return in the main input field, and there is text to save,
             // create new **Todo** model persisting it to *localStorage*.
 //            createOnEnter: function(e) {
@@ -168,7 +181,7 @@ var logApp = logApp || (function(){
 //              var show = function(){tooltip.show().fadeIn();};
 //              this.tooltipTimeout = _.delay(show, 1000);
 //            }
-
+*/
         });
 
 
@@ -183,20 +196,13 @@ var logApp = logApp || (function(){
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView;
             logAppViewObj.render();
-			setInterval("fetchData()",1000);
-			function fetchData(){
-				addData([
-               {id:1,timestamp:'123123123',type:'log',message:'This is log'}
-              , {id:2,timestamp:'2223123123',type:'error',message:'This is error'}
-             , {id:3,timestamp:'333333333',type:'warning',message:'This is warning'}
-				]);
-			}
-            
+            var returnId = setInterval( "logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:'2223123123',type:'error',message:'This is error'},{id:3,timestamp:'333333333',type:'warning',message:'This is warning'}])",1000 );
+			//[{id:1,timestamp:'123123123',type:'log',message:'This is log'},{id:2,timestamp:'2223123123',type:'error',message:'This is error'},{id:3,timestamp:'333333333',type:'warning',message:'This is warning'}]
         });
     }
     
     function addData(data){
-        logCollectionObj.add(data);
+		logCollectionObj.add(data);
     }
     
     return {
@@ -204,5 +210,5 @@ var logApp = logApp || (function(){
         , addData: addData
     }
 })()
-    
+console.log(logApp);
 logApp.init();
