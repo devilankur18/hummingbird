@@ -8,9 +8,15 @@ and open the template in the editor.
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="./css/bootstrap.css">
+        
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js" ></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js" ></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>
+        
         <script src="./js/bootstrap-dropdown.js"></script>
         <script src="./js/bootstrap-tabs.js"></script>
+        <script src="./js/dashboard.js"></script>
         
         
     </head>
@@ -24,7 +30,7 @@ and open the template in the editor.
 <!--                  <form action="" _lpchecked="1">
                 <input type="text" placeholder="Search">
               </form>-->
-
+            
             <ul class="tabs">
                 <li class="active"><a href="#home">ALL</a></li>
                 <li>
@@ -67,7 +73,8 @@ and open the template in the editor.
             
             <div class="sidebar">
                 </br>
-                <form action="" _lpchecked="1">
+                <div id="showfilter"></div>
+<!--                <form action="" _lpchecked="1">
                     <input type="text" placeholder="Search">
                 </form
                 
@@ -124,7 +131,7 @@ and open the template in the editor.
                   </label>
                 </li>
                 
-              </ul>
+              </ul>-->
             </div>
                 
                 
@@ -146,6 +153,54 @@ and open the template in the editor.
              
             </div>
         </div>
+        
+        <!-- Templates -->
+        <script type="text/template" id="filterModel-template">
+            <div>
+                <form action="" _lpchecked="1">
+                    <input type="text" placeholder="Search">
+                </form
+                
+                <label>Select Modules</label>
+                <div class="input">
+                    <select class="medium" size="5" multiple="multiple" name="multiSelect" id="multiSelect">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    </select>
+                </div>
+                </br>
+                
+                <div class="inline-inputs">
+                    <p>
+                        <input class="small" type="text" placeholder="From" value="<%= from %>">
+                    </p>
+                    <p>
+                        <input class="small" type="text" placeholder="To" value="<%= to %>">
+                    </p> 
+              </div>
+                
+            <div class="input">
+                <ul class="inputs-list">
+                <%  for (var i = 0; i < messageTypes.length; i++) { %>
+                    <% var type = messageTypes[i]; %>
+                    <li>
+                      <label>
+                          <input type="checkbox" name="messageTypes" value="<%= type.name %>" <% if(type.enable){ %> checked="checked" <% } %> >
+                        <span><%= type.title %></span>
+                      </label>
+                    </li>
+                <% } %>
+                </ul>
+            </div>
+                
+        </div>
+        </script>
+        
+        <script type="text/template" id="messageTypeModel-template">
+        </script>
         
         <script type="text/javascript">
 //            $('#topbar').dropdown();
