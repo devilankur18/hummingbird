@@ -146,15 +146,15 @@ var logApp = logApp || (function(){
 			  todo.set({count:logCollectionObj.length});
 			  console.log(todo);
 			  if(logCollectionObj.length > 10){
-				this.removeOne(logCollectionObj.length);
+				this.removeOne(logCollectionObj.length - 10);
 			  }
 			  var view = new logView({model: todo});
 			  this.eltable.append(view.render().el);
             }
 			, removeOne: function(idx) {
-				$('#logTable:nth-child(idx)').empty();
 				
-			  }
+				$('#'+idx).empty();
+			}
 
             // Add all items in the **Todos** collection at once.
             , addAll: function() {
