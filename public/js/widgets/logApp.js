@@ -203,8 +203,6 @@ var logApp = logApp || (function(w,d,$){
 //            }
 */
         });
-
-
     }
     
     function init(o){
@@ -233,5 +231,4 @@ var logApp = logApp || (function(w,d,$){
         , getConfig: getConfig
     }
 })(window, document, jQuery)
-console.log(logApp);
 logApp.init();

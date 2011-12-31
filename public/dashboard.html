@@ -10,47 +10,148 @@ and open the template in the editor.
         <link rel="stylesheet" href="./css/bootstrap.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script src="./js/bootstrap-dropdown.js"></script>
+        <script src="./js/bootstrap-tabs.js"></script>
+        
         
     </head>
     <body>
         
-        <div class="topbar-wrapper">
-            <div id="topbar-example" class="topbar" data-dropdown="dropdown">
-              <div class="topbar-inner">
-                <div class="container">
-                  <h3><a href="#">Debuggify</a></h3>
-                  <form action="" _lpchecked="1">
-                    <input type="text" placeholder="Search">
-                  </form>
-                  <ul class="nav secondary-nav">
-                      
-                    <li class="menu">
-                      <a href="#" class="menu">Username</a>
-                      <ul class="menu-dropdown">
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Logout</a></li>
-                      </ul>
-                    </li>
-                    
+        <div id="topbar-example" class="topbar" data-dropdown="dropdown">
+          <div class="topbar-inner">
+            <div class="container">
+              <h3><a href="#">Debuggify</a></h3>
+
+<!--                  <form action="" _lpchecked="1">
+                <input type="text" placeholder="Search">
+              </form>-->
+
+            <ul class="tabs">
+                <li class="active"><a href="#home">ALL</a></li>
+                <li>
+                    <a href="#profile">Filter1<img src="./images/icon_close_light.png" width="13" height="14"></img></a>
+                </li>
+                <li><a href="#messages">Filter2</a></li>
+                <li><a href="#settings">Filter3</a></li>
+            </ul>
+
+
+
+              <ul class="nav secondary-nav">    
+                <li class="menu">
+                  <a href="#" class="menu">Project</a>
+                  <ul class="menu-dropdown">
+                    <li><a href="#">Project1</a></li>
+                    <li><a href="#">Project2</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Create New</a></li>
                   </ul>
-                </div>
-              </div>
+                </li>
+
+                <li class="menu">
+                  <a href="#" class="menu">Username</a>
+                  <ul class="menu-dropdown">
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Logout</a></li>
+                  </ul>
+                </li>
+
+              </ul>
             </div>
           </div>
+        </div>
+        
         
         <div id="container" class="container-fluid">
+            
             <div class="sidebar">
-              ...
+                </br>
+                <form action="" _lpchecked="1">
+                    <input type="text" placeholder="Search">
+                </form
+                
+                <label>Select Modules</label>
+                <div class="input">
+                    <select class="medium" size="5" multiple="multiple" name="multiSelect" id="multiSelect">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    </select>
+                </div>
+                </br>
+                <div class="clearfix"></div>
+                <div class="inline-inputs">
+                    <p>
+                        <input class="small" type="text" value="May 1, 2011">
+                        <input class="mini" type="text" value="12:00am">
+                        From
+                    </p>
+                    
+                    <p>
+                        <input class="small" type="text" value="May 8, 2011">
+                        <input class="mini" type="text" value="11:59pm">
+                        To
+                    </p> 
+              </div>
+                
+            <div class="input">
+              <ul class="inputs-list">
+                <li>
+                  <label>
+                    <input type="checkbox" name="optionsCheckboxes" value="option0" >
+                    <span>All</span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name="optionsCheckboxes" value="option1">
+                    <span>Log</span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name="optionsCheckboxes" value="option2">
+                    <span>Warning</span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" name="optionsCheckboxes" value="option2">
+                    <span>Error</span>
+                  </label>
+                </li>
+                
+              </ul>
             </div>
+                
+                
+            </div>
+            
             <div class="content">
-              ...
+             </br>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             <span class="help-block">All times are shown as Pacific Standard Time (GMT -08:00).</span>
+             
             </div>
         </div>
         
         <script type="text/javascript">
-            $('#topbar').dropdown();
+//            $('#topbar').dropdown();
+               $(function () {
+                $('.tabs').tabs()
+              })
         </script>
     </body>
 </html>
