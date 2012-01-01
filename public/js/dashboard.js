@@ -25,14 +25,12 @@ var Dashboard = Dashboard || (function(w,d,$){
     
     var messageTypes = new messageTypeCollection([
         {name: 'log', title: 'Log'}
-        , {name: 'warning'}
-        , {name: 'error'}
-        , {name: 'information'}
-        , {name: 'assert'}
-        , {name: 'dump'}
+        , {name: 'warning', title: 'Warning'}
+        , {name: 'error', title: 'Error'}
+        , {name: 'information', title: 'Information'}
+        , {name: 'assert', title: 'Assert'}
+        , {name: 'dump', title: 'Dump'}
     ]);
-    
-    
     
     // Model used to manage user filters
     var filterModel = Backbone.Model.extend({
@@ -56,7 +54,7 @@ var Dashboard = Dashboard || (function(w,d,$){
        }
 
        , initialize: function(){
-           this.messageTypes = messageTypes.toJSON();
+           this.set({messageTypes: messageTypes.toJSON()});
        }
     });
     
@@ -83,8 +81,6 @@ var Dashboard = Dashboard || (function(w,d,$){
         var filterViewObj = new filterView( {el: $('#showfilter')} );
         filterViewObj.render();
     });
-    
-    
     
 })(window,document,jQuery)
 
