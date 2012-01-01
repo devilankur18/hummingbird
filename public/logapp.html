@@ -28,6 +28,15 @@
     <script src="/js/widgets/map.js"></script>
 -->
     <script src="./js/widgets/logApp.js"></script>
+    <script type="text/javascript">
+        function func(a,b){
+            debugger;
+            var type = a;
+       // var obj = toJSON({ type : b });
+            DFY.logApp.setConfig({ type: b});
+        }
+    </script>
+        
     <title>Hummingbird</title>
 
 <!--    <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
@@ -41,27 +50,36 @@
 <body>
 
   <h1>Hummingbird</h1>
+   <div>
+            <ul>
+            <li><label><input type="checkbox" name="error" value="true"  checked onchange = DFY.logApp.setConfig({error:this.checked}); />Error</label></li>
+            <li><label><input type="checkbox" name="warning" value=true"  checked onchange = "DFY.logApp.setConfig({warning:this.checked}); "/>Warnings</label></li>
+            <li><label><input type="checkbox" name="log" value="true" checked onchange = "DFY.logApp.setConfig({log:this.checked})"/>Logs</label></li>
+            </ul>
+        </div>
 
   <div id="logapp">
       <div class="logapp-header">
           <h1>Log App</h1>
-      </div>
+         
+        </div>
+
       <div class="logapp-body" >
 		<div id="logTable" class="logContainer">
-		</div>
+        </div>
 	  </div>
       <div class="logapp-footer"></div>
   </div>
   
   <div style="clear: both;"></div>
- 
+  
    <!-- Templates -->
     <script type="text/template" id="log-stats-template">
         <div>Stats are as follows</div>
+        
     </script>
 	<script type="text/template" id="logModel-template">
-        <div id="<%= count%>">
-            <div class="counter" style="display: inline ; color:#F8EFFB "><%= count %></div>
+        <div class="<%= type %>">
             <div class="ip" style="display: inline">[<%= timestamp %>]</div>
             <div class="<%= type %>" style="display: inline"><%= message %></div>
             <div class="ua" style="display: inline"><%= userAgent %></div>

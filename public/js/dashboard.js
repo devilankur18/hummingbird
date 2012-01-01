@@ -4,39 +4,40 @@
  */
  if(typeof DFY == 'undefined') DFY = {};
 
-DFY.Dashboard = DFY.Dashboard || (function(w,d,$){
-    
-    // Model used to define the different types of message
-    var messageTypeModel = Backbone.Model.extend({
-        defaults: {
-            name: ''                // Name of the message type
+ DFY.Dashboard = DFY.Dashboard || (function (w, d, $) {
+
+     // Model used to define the different types of message
+     var messageTypeModel = Backbone.Model.extend({
+         defaults: {
+             name: ''                // Name of the message type
             , title: ''             // Title of the message
             , description: ''       // Description of the message
             , enable: true          // true | false
+            , counter: 0            //counter for stats
+         }
+
+        , initialize: function () {
         }
-        
-        , initialize: function(){
-        }
-    });
-    
-    var messageTypeCollection =  Backbone.Collection.extend({
-        model: messageTypeModel
-    })
-    
-    
-    var messageTypes = new messageTypeCollection([
-        {name: 'log', title: 'Log'}
-        , {name: 'warning', title: 'Warning'}
-        , {name: 'error', title: 'Error'}
-        , {name: 'information', title: 'Information'}
-        , {name: 'assert', title: 'Assert'}
-        , {name: 'dump', title: 'Dump'}
+     });
+
+     var messageTypeCollection = Backbone.Collection.extend({
+         model: messageTypeModel
+     })
+
+
+     var messageTypes = new messageTypeCollection([
+        { name: 'log', title: 'Log' }
+        , { name: 'warning', title: 'Warning' }
+        , { name: 'error', title: 'Error' }
+        , { name: 'information', title: 'Information' }
+        , { name: 'assert', title: 'Assert' }
+        , { name: 'dump', title: 'Dump' }
     ]);
-    
-    // Model used to manage user filters
-    var filterModel = Backbone.Model.extend({
-       defaults: {
-           id: ''
+
+     // Model used to manage user filters
+     var filterModel = Backbone.Model.extend({
+         defaults: {
+             id: ''
            , title: ''                  // Tile for the filter
            , description: ''            // Description
            , from: ''                   // Timestamp
@@ -52,47 +53,60 @@ DFY.Dashboard = DFY.Dashboard || (function(w,d,$){
            , message: ''                // Some Search expression
            , moduleId: ''               // The Id of the module to lookin
            , userAgent: ''              // The User Agent
-       }
+         }
 
-       , initialize: function(){
-           this.set({messageTypes: messageTypes.toJSON()});
+       , initialize: function () {
+           this.set({ messageTypes: messageTypes.toJSON() });
        }
-    });
-    
-    var filterModelObj = new filterModel();
-    
-    var filterView = Backbone.View.extend({
-        el: false
+     });
+
+     var filterModelObj = new filterModel();
+
+     var filterView = Backbone.View.extend({
+         el: false
         , template: false
-        
+
         , events: {
-          "keypress .search-input"      : "searchOnEnter"
+
+            "keypress .search-input": "searchOnEnter"
+          , 'change ul.messageTypes>li>label>input': 'hideMessage'
         }
-        
-        , searchOnEnter: function(e) {
-          if (e.keyCode == 13){
-              // TODO
-              var text = this.$('.search-input', this.el).val();
-              console.log('searching for ' + text);
-          }
+
+        , hideMessage: function (e) {
+            console.log(e);
+			//DFY.logApp.setConfig({this.name:this.checked});
+			//if(!this.checked)
+			{
+			//	$(".Classname").hide();
+			}
         }
-        , initialize: function(o){
+        , searchOnEnter: function (e) {
+            if (e.keyCode == 13) {
+                // TODO
+                var text = this.$('.search-input', this.el).val();
+                console.log('searching for ' + text);
+            }
+        }
+        , initialize: function (o) {
             console.log('Initialining filter View');
             this.template = _.template($('#filterModel-template').html());
+            $(document).bind('message:log',function(e){
+            console.log(e)
+            });
         }
-        , render: function(){
+        , render: function () {
             console.log(this.el);
             console.log(filterModelObj);
             a = filterModelObj;
-            this.el.html(this.template( filterModelObj.toJSON() )); 
+            this.el.html(this.template(filterModelObj.toJSON()));
         }
-    })
-    
-    $(function(){
-        var filterViewObj = new filterView( {el: $('#showfilter')} );
-        filterViewObj.render();
-    });
-    
-})(window,document,jQuery)
+     })
+
+     $(function () {
+         var filterViewObj = new filterView({ el: $('#showfilter') });
+         filterViewObj.render();
+     });
+
+ })(window, document, jQuery)
 
 var a;
