@@ -167,8 +167,11 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
 
             , addOne: function (todo) {
 
+
                 setCounter(todo.get("type"));
                 if (config[todo.get("type")]) {
+                    var obj = document.getElementById('logTable');
+                    obj.scrollTop = obj.scrollHeight;
                     todo.set({ count: this.count++ });
                     var view = new logView({ model: todo });
                     this.eltable.append(view.render().el);
