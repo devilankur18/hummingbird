@@ -2,8 +2,9 @@
  * Created dashboard pages
  * @Author Ankur Agarwal
  */
+ if(typeof DFY == "undefined ") DFY = {};
 
-var Dashboard = Dashboard || (function(w,d,$){
+DFY.Dashboard = DFY.Dashboard || (function(w,d,$){
     
     // Model used to define the different types of message
     var messageTypeModel = Backbone.Model.extend({

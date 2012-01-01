@@ -3,8 +3,8 @@
  * and open the template in the editor.
  */
 /* test comment added */
- 
-var logApp = logApp || (function(w,d,$){
+if(typeof DFY == "undefined ") DFY = {};
+DFY.logApp = DFY.logApp || (function(w,d,$){
     
     //Class Definitions
     var logModel;
@@ -18,8 +18,8 @@ var logApp = logApp || (function(w,d,$){
     
     var defaults = {
         error: true
-        , warning: false
-        , log: false
+        , warning: true
+        , log: true
     }
     
     var config = {
@@ -86,20 +86,15 @@ var logApp = logApp || (function(w,d,$){
             tagName:  "div"
 
             // Cache the template function for a single item.
-            , template: _.template($('#logModel-template').html())
+            , template: false
 
-            // The DOM events specific to an item.
-            , events: {
-    //          "click .check"              : "toggleDone",
-            }
 
             // The logView listens for changes to its model, re-rendering.
             , initialize: function() {
-    //          this.model.bind('change', this.render, this);
-    //          this.model.bind('destroy', this.remove, this);
+              this.template  = _.template($('#logModel-template').html());
             }
 
-            // Re-render the contents of the todo item.
+            // Re-render the contents of the log item.
             , render: function() {
               $(this.el).html(this.template(this.model.toJSON()));
               return this;
@@ -119,21 +114,16 @@ var logApp = logApp || (function(w,d,$){
             , elHeader: $("#logapp .logapp-header")
             , elBody: $("#logapp .logapp-body")
             , elFooter: $("#logapp .logapp-footer")
-			, eltable: $("#logTable")
+            , eltable: $("#logTable")
 			 
             // Our template for the line of statistics at the bottom of the app.
-            , statsTemplate: _.template($('#log-stats-template').html())
+            , statsTemplate: false
 
-            , listTemplate: _.template($('#log-list-template').html())
+            , listTemplate: false
             
-            , headTemplate: _.template($('#log-head-template').html())
-           
-
-            // Delegated events for creating new items, and clearing completed ones.
-            , events: {
-//              "keypress #new-todo":  "createOnEnter",
-            }
-
+            , headTemplate: false
+            
+            
             // At initialization we bind to the relevant events on the `logCollection`
             // collection, when items are added or changed. Kick things off by
             // loading any preexisting todos that might be saved in *localStorage*.
@@ -141,7 +131,10 @@ var logApp = logApp || (function(w,d,$){
               logCollectionObj.bind('add',   this.addOne, this);
               logCollectionObj.bind('reset', this.addAll, this);
               logCollectionObj.bind('all',   this.render, this);
-			  logCollectionObj.bind('remove', this.removeOne, this);
+              logCollectionObj.bind('remove', this.removeOne, this);
+              this.statsTemplate = _.template($('#log-stats-template').html());
+              this.listTemplate  = _.template($('#log-list-template').html());
+              this.headTemplate  = _.template($('#log-head-template').html());
 			  
             }
 
@@ -153,20 +146,13 @@ var logApp = logApp || (function(w,d,$){
               return this;
             }
 
-            // Add a single todo item to the list by creating a view for it, and
-            // appending its element to the `<ul>`.
-			, count : 1
+            // Add a single log item to the list by creating a view for it, 
+            , count : 1
 			
             , addOne: function(todo) {
-                  //this.count++;
-                 // debugger;
-//                 if((typeError&&(todo.get("type")=="error"))||(typeWarning&&(todo.get("type")=="warning"))||(typeLog)&&(todo.get("type")=="log")){
+                
                  if( config[todo.get("type")] ){
                       todo.set({count:this.count++});
-                      /* console.log(todo);
-                      if(logCollectionObj.length > 10){
-                            //this.removeOne(logCollectionObj.length - 10);
-                      } */
                       var view = new logView({model: todo});
                       this.eltable.append(view.render().el);
                 }
@@ -176,33 +162,11 @@ var logApp = logApp || (function(w,d,$){
                     $('#'+idx).empty();
             }
 
-            // Add all items in the **Todos** collection at once.
+            // Add all items in the **Logs** collection at once.
             , addAll: function() {
               logCollectionObj.each(this.addOne);
             }
-/*
-            // If you hit return in the main input field, and there is text to save,
-            // create new **Todo** model persisting it to *localStorage*.
-//            createOnEnter: function(e) {
-//              var text = this.input.val();
-//              if (!text || e.keyCode != 13) return;
-//              logCollectionObj.create({text: text});
-//              this.input.val('');
-//            }
-
-            // Lazily show the tooltip that tells you to press `enter` to save
-            // a new todo item, after one second.
-//            , showTooltip: function(e) {
-//              var tooltip = this.$(".ui-tooltip-top");
-//              var val = this.input.val();
-//              tooltip.fadeOut();
-//              if (this.tooltipTimeout) clearTimeout(this.tooltipTimeout);
-//              if (val == '' || val == this.input.attr('placeholder')) return;
-//              var show = function(){tooltip.show().fadeIn();};
-//              this.tooltipTimeout = _.delay(show, 1000);
-//            }
-*/
-        });
+     });
     }
     
     function init(o){
@@ -216,7 +180,7 @@ var logApp = logApp || (function(w,d,$){
             logAppViewObj = new logAppView;
             logAppViewObj.render();
             var returnId = setInterval( "logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])",1000 );
-			//[{id:1,timestamp:'123123123',type:'log',message:'This is log'},{id:2,timestamp:'2223123123',type:'error',message:'This is error'},{id:3,timestamp:'333333333',type:'warning',message:'This is warning'}]
+			
         });
     }
     
