@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 To change this template, choose Tools | Templates
 and open the template in the editor.
 -->
@@ -115,13 +115,14 @@ and open the template in the editor.
               </div>
                 
             <div class="input">
-                <ul class="inputs-list">
+                <ul class="inputs-list messageTypes">
                 <%  for (var i = 0; i < messageTypes.length; i++) { %>
                     <% var type = messageTypes[i]; %>
                     <li>
                       <label>
                           <input type="checkbox" name="messageTypes" value="<%= type.name %>" <% if(type.enable){ %> checked="checked" <% } %> >
                         <span><%= type.title %></span>
+                        <span><%= type.counter %></span>
                       </label>
                     </li>
                 <% } %>

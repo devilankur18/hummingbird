@@ -24,7 +24,7 @@ $(
                 , ip: ''
 
                 , done:  false          //Todo Items
-                , order: Todos.nextOrder()
+                , order: Logs.nextOrder()
             }
         }
         
@@ -65,23 +65,23 @@ $(
           return this.without.apply(this, this.done());
         },
 
-        // We keep the Todos in sequential order, despite being saved by unordered
+        // We keep the Logs in sequential order, despite being saved by unordered
         // GUID in the database. This generates the next order number for new items.
         nextOrder: function() {
           if (!this.length) return 1;
           return this.last().get('order') + 1;
         },
 
-        // Todos are sorted by their original insertion order.
-        comparator: function(todo) {
-          return todo.get('order');
+        // Logs are sorted by their original insertion order.
+        comparator: function(log) {
+          return log.get('order');
         }
 
     });
     
-  // Create our global collection of **Todos**.
-  window.Todos = new logCollection;
-  console.log(Todos);
+  // Create our global collection of **Logs**.
+  window.Logs = new logCollection;
+  console.log(Logs);
   
   
   // Todo Item View
@@ -99,9 +99,9 @@ $(
     // The DOM events specific to an item.
     events: {
       "click .check"              : "toggleDone",
-      "dblclick div.todo-text"    : "edit",
-      "click span.todo-destroy"   : "clear",
-      "keypress .todo-input"      : "updateOnEnter"
+      "dblclick div.log-text"    : "edit",
+      "click span.log-destroy"   : "clear",
+      "keypress .log-input"      : "updateOnEnter"
     },
 
     // The logView listens for changes to its model, re-rendering.
@@ -121,8 +121,8 @@ $(
     // we use `jQuery.text` to set the contents of the todo item.
     setText: function() {
       var text = this.model.get('text');
-      this.$('.todo-text').text(text);
-      this.input = this.$('.todo-input');
+      this.$('.log-text').text(text);
+      this.input = this.$('.log-input');
       this.input.bind('blur', _.bind(this.close, this)).val(text);
     },
 
@@ -183,24 +183,24 @@ $(
 
     // At initialization we bind to the relevant events on the `logCollection`
     // collection, when items are added or changed. Kick things off by
-    // loading any preexisting todos that might be saved in *localStorage*.
+    // loading any preexisting Logs that might be saved in *localStorage*.
     initialize: function() {
       this.input    = this.$("#new-todo");
 
-      Todos.bind('add',   this.addOne, this);
-      Todos.bind('reset', this.addAll, this);
-      Todos.bind('all',   this.render, this);
+      Logs.bind('add',   this.addOne, this);
+      Logs.bind('reset', this.addAll, this);
+      Logs.bind('all',   this.render, this);
 
-      Todos.fetch();
+      Logs.fetch();
     },
 
     // Re-rendering the App just means refreshing the statistics -- the rest
     // of the app doesn't change.
     render: function() {
       this.$('#todo-stats').html(this.statsTemplate({
-        total:      Todos.length,
-        done:       Todos.done().length,
-        remaining:  Todos.remaining().length
+        total:      Logs.length,
+        done:       Logs.done().length,
+        remaining:  Logs.remaining().length
       }));
     },
 
@@ -211,9 +211,9 @@ $(
       this.$("#todo-list").append(view.render().el);
     },
 
-    // Add all items in the **Todos** collection at once.
+    // Add all items in the **Logs** collection at once.
     addAll: function() {
-      Todos.each(this.addOne);
+      Logs.each(this.addOne);
     },
 
     // If you hit return in the main input field, and there is text to save,
@@ -221,13 +221,13 @@ $(
     createOnEnter: function(e) {
       var text = this.input.val();
       if (!text || e.keyCode != 13) return;
-      Todos.create({text: text});
+      Logs.create({text: text});
       this.input.val('');
     },
 
     // Clear all done todo items, destroying their models.
     clearCompleted: function() {
-      _.each(Todos.done(), function(todo){todo.destroy();});
+      _.each(Logs.done(), function(todo){todo.destroy();});
       return false;
     },
 

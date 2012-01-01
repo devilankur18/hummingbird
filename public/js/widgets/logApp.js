@@ -37,6 +37,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
     }
 
     var config = {
+        topToBottom: false
     };
 
     function getConfig(o) {
@@ -136,8 +137,15 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
             , listTemplate: false
 
             , headTemplate: false
-            
-//            , counter: {
+
+            , events: {
+                "change #tobottom": "topToBottom"
+            }
+
+            , topToBottom: function (e) {
+                config['topToBottom'] = e.currentTarget.checked;
+            }
+            //            , counter: {
 
 
             // At initialization we bind to the relevant events on the `logCollection`
@@ -151,14 +159,13 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
                 this.statsTemplate = _.template($('#log-stats-template').html());
                 this.listTemplate = _.template($('#log-list-template').html());
                 this.headTemplate = _.template($('#log-head-template').html());
-
+                this.elHeader.html(this.statsTemplate);
+                this.elFooter.html();
             }
 
             // Re-rendering the App just means refreshing the statistics -- the rest
             // of the app doesn't change.
             , render: function () {
-                this.elHeader.html(this.statsTemplate);
-                this.elFooter.html();
                 return this;
             }
 
@@ -167,14 +174,25 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
 
             , addOne: function (todo) {
 
-
                 setCounter(todo.get("type"));
                 if (config[todo.get("type")]) {
                     var obj = document.getElementById('logTable');
-                    obj.scrollTop = obj.scrollHeight;
+                    obj.scrollTop = obj.scrollHeight - 50;
                     todo.set({ count: this.count++ });
                     var view = new logView({ model: todo });
-                    this.eltable.append(view.render().el);
+                    var logAppend = view.render().el;
+
+                    //$(logAppend).slideUp();
+                    //console.log($(logAppend).height());
+                    if (config['topToBottom']) {
+                        this.eltable.append(logAppend);
+                    }
+                    else {
+                        this.eltable.prepend(logAppend);
+                    }
+
+                    $(logAppend).hide().slideDown();
+                    //console.log($(logAppend).height());
                 }
             }
             , removeOne: function (idx) {
@@ -214,7 +232,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
         , setConfig: setConfig
         , getConfig: getConfig
         , getCounter: getCounter
-        , setCounter:setCounter
+        , setCounter: setCounter
     }
 })(window, document, jQuery)
 DFY.logApp.init();
