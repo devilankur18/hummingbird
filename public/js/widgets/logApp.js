@@ -123,18 +123,6 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
             // the App already present in the HTML.
             el: false
 
-            //, elHeader: $("#logapp .logapp-header")
-            //, elBody: $("#logapp .logapp-body")
-            //, elFooter: $("#logapp .logapp-footer")
-            //, eltable: $("#logTable")
-
-            // Our template for the line of statistics at the bottom of the app.
-            //, statsTemplate: false
-
-            //, listTemplate: false
-
-            //, headTemplate: false
-
             , events: {
                 "change #tobottom": "topToBottom"
             }
@@ -150,16 +138,9 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
             // loading any preexisting todos that might be saved in *localStorage*.
             , initialize: function () {
                 logCollectionObj.bind('add', this.addOne, this);
-                logCollectionObj.bind('reset', this.addAll, this);
-                logCollectionObj.bind('all', this.render, this);
-                logCollectionObj.bind('remove', this.removeOne, this);
-                this.template = _.template($('#logModel-template').html());
+                this.template = _.template($('#log-stats-template').html());
+                this.$('.check', this.el).html(this.template());
 
-                // this.statsTemplate = _.template($('#log-stats-template').html());
-                // this.listTemplate = _.template($('#log-list-template').html());
-                // this.headTemplate = _.template($('#log-head-template').html());
-                // this.elHeader.html(this.statsTemplate);
-                // this.elFooter.html();
             }
 
             // Re-rendering the App just means refreshing the statistics -- the rest
@@ -171,14 +152,14 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
             // Add a single log item to the list by creating a view for it, 
             , count: 1
 
-            , addOne: function (todo) {
+            , addOne: function (logModel) {
 
-                setCounter(todo.get("type"));
-                if (config[todo.get("type")]) {
+                setCounter(logModel.get("type"));
+                if (config[logModel.get("type")]) {
                     //var obj = document.getElementById('content'); //TODO
                     //obj.scrollTop = obj.scrollHeight - 50;
-                    todo.set({ count: this.count++ });
-                    var view = new logView({ model: todo });
+                    logModel.set({ count: this.count++ });
+                    var view = new logView({ model: logModel });
                     var logAppend = view.render().el;
 
                     //$(logAppend).slideUp();
