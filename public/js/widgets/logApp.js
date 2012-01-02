@@ -97,21 +97,18 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
         // The DOM element for a log item...
         logView = Backbone.View.extend({
 
-            //... is a list tag.
-            tagName: "div"
-
             // Cache the template function for a single item.
-            , template: false
+            template: false
 
 
             // The logView listens for changes to its model, re-rendering.
             , initialize: function () {
-                this.template = _.template($('#logModel-template').html());
+                this.logtemplate = _.template($('#logModel-template').html());
             }
 
             // Re-render the contents of the log item.
             , render: function () {
-                $(this.el).html(this.template(this.model.toJSON()));
+                $(this.el).html(this.logtemplate(this.model.toJSON()));
                 return this;
             }
         });
@@ -124,19 +121,19 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
 
             // Instead of generating a new element, bind to the existing skeleton of
             // the App already present in the HTML.
-            el: $("#logapp")
+            el: false
 
-            , elHeader: $("#logapp .logapp-header")
-            , elBody: $("#logapp .logapp-body")
-            , elFooter: $("#logapp .logapp-footer")
-            , eltable: $("#logTable")
+            //, elHeader: $("#logapp .logapp-header")
+            //, elBody: $("#logapp .logapp-body")
+            //, elFooter: $("#logapp .logapp-footer")
+            //, eltable: $("#logTable")
 
             // Our template for the line of statistics at the bottom of the app.
-            , statsTemplate: false
+            //, statsTemplate: false
 
-            , listTemplate: false
+            //, listTemplate: false
 
-            , headTemplate: false
+            //, headTemplate: false
 
             , events: {
                 "change #tobottom": "topToBottom"
@@ -156,11 +153,13 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
                 logCollectionObj.bind('reset', this.addAll, this);
                 logCollectionObj.bind('all', this.render, this);
                 logCollectionObj.bind('remove', this.removeOne, this);
-                this.statsTemplate = _.template($('#log-stats-template').html());
-                this.listTemplate = _.template($('#log-list-template').html());
-                this.headTemplate = _.template($('#log-head-template').html());
-                this.elHeader.html(this.statsTemplate);
-                this.elFooter.html();
+                this.template = _.template($('#logModel-template').html());
+
+                // this.statsTemplate = _.template($('#log-stats-template').html());
+                // this.listTemplate = _.template($('#log-list-template').html());
+                // this.headTemplate = _.template($('#log-head-template').html());
+                // this.elHeader.html(this.statsTemplate);
+                // this.elFooter.html();
             }
 
             // Re-rendering the App just means refreshing the statistics -- the rest
@@ -176,8 +175,8 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
 
                 setCounter(todo.get("type"));
                 if (config[todo.get("type")]) {
-                    var obj = document.getElementById('logTable');
-                    obj.scrollTop = obj.scrollHeight - 50;
+                    //var obj = document.getElementById('content'); //TODO
+                    //obj.scrollTop = obj.scrollHeight - 50;
                     todo.set({ count: this.count++ });
                     var view = new logView({ model: todo });
                     var logAppend = view.render().el;
@@ -185,10 +184,10 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
                     //$(logAppend).slideUp();
                     //console.log($(logAppend).height());
                     if (config['topToBottom']) {
-                        this.eltable.append(logAppend);
+                        this.$('.logContainer').append(logAppend);
                     }
                     else {
-                        this.eltable.prepend(logAppend);
+                        this.$('.logContainer').prepend(logAppend);
                     }
 
                     $(logAppend).hide().slideDown();
@@ -215,7 +214,8 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
             logApp();
 
             // Finally, we kick things off by creating the **App**.
-            logAppViewObj = new logAppView;
+            logAppViewObj = new logAppView({ el: $("#logapp") });
+
             logAppViewObj.render();
             var returnId = setInterval("DFY.logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])", 1000);
 
