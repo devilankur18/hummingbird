@@ -54,7 +54,7 @@ var logApp = logApp || (function(w,d,$){
                     , ip: ''
                 }
             }
-            , intialize:function(){
+            , intialize: function(){
 
             }
         });

@@ -47,7 +47,7 @@ var Dashboard = Dashboard || (function(w,d,$){
            , path: ''                   // path of the url ex /home
            , cookie: ''                 // cookie id of the user
            , referer: ''                // Value of referer
-           , messageTypes: ''  // Type of message
+           , messageTypes: ''           // Type of message
            , message: ''                // Some Search expression
            , moduleId: ''               // The Id of the module to lookin
            , userAgent: ''              // The User Agent
@@ -62,9 +62,19 @@ var Dashboard = Dashboard || (function(w,d,$){
     
     var filterView = Backbone.View.extend({
         el: false
-        
         , template: false
         
+        , events: {
+          "keypress .search-input"      : "searchOnEnter"
+        }
+        
+        , searchOnEnter: function(e) {
+          if (e.keyCode == 13){
+              // TODO
+              var text = this.$('.search-input', this.el).val();
+              console.log('searching for ' + text);
+          }
+        }
         , initialize: function(o){
             console.log('Initialining filter View');
             this.template = _.template($('#filterModel-template').html());
