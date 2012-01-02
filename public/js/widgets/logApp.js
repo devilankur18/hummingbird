@@ -22,6 +22,10 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         , log: 0
     }
 
+    function updateGlobal() {
+        A.publish('count:messageType', defaultCounter);
+    }
+
     function getCounter(o) {
         return defaultCounter[o];
     }
@@ -112,27 +116,27 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         // Instead of generating a new element, bind to the existing skeleton of
         // the App already present in the HTML.
         el: false
-        
+
         , defaults: {
             error: true
             , warning: true
             , log: true
-            ,topToBottom: false
+            , topToBottom: false
         }
-        
+
         , config: {}
-        
+
         , setConfig: function (o) {
-            this.config = $.extend( {}, this.defaults, this.config, o);
+            this.config = $.extend({}, this.defaults, this.config, o);
         }
-        
+
         , events: {
             "change #tobottom": "topToBottom"
         }
 
         , subscribe: function () {
             var that = this;
-            A.subscribe('filter:messageType', function(o){
+            A.subscribe('filter:messageType', function (o) {
                 that.setConfig(o);
             })
         }
@@ -152,7 +156,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
             logCollectionObj.bind('add', this.addOne, this);
             this.template = _.template($('#log-stats-template').html());
             this.$('.check', this.el).html(this.template());
-
+            setInterval("DFY.logApp.updateGlobal()", 3000);
         }
 
         // Re-rendering the App just means refreshing the statistics -- the rest
@@ -167,11 +171,13 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         , addOne: function (logModel) {
 
             setCounter(logModel.get("type"));
+            // A.publish('count:messageType', {type: logModel.get("type"), count: getCounter(logModel.get("type"))});
+
             if (this.config[logModel.get("type")]) {
                 //var obj = document.getElementById('content'); //TODO
                 //obj.scrollTop = obj.scrollHeight - 50;
-                logModel.set({count: this.count++});
-                var view = new logView({model: logModel});
+                logModel.set({ count: this.count++ });
+                var view = new logView({ model: logModel });
                 var logAppend = view.render().el;
 
                 //$(logAppend).slideUp();
@@ -196,6 +202,8 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         , addAll: function () {
             logCollectionObj.each(this.addOne);
         }
+
+
     });
 
     function init(o) {
@@ -203,7 +211,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         //Attach functions to be executed at ready Event Handler
         $(document).ready(function () {
             // Finally, we kick things off by creating the **App**.
-            logAppViewObj = new logAppView({el: $("#logapp")});
+            logAppViewObj = new logAppView({ el: $("#logapp") });
 
             logAppViewObj.render();
             var returnId = setInterval("DFY.logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])", 1000);
@@ -215,9 +223,19 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         logCollectionObj.add(data);
     }
 
+    function searchBy(param, value) {
+        return logCollectionObj.filter(function (o) {
+            var temp = o.toJSON();
+            return temp[param] == value;
+        })
+    }
+
     return {
         init: init
         , addData: addData
+        , updateGlobal: updateGlobal
+        , searchBy: searchBy
     }
 })(window, document, jQuery, amplify)
 DFY.logApp.init();
+//DFY.logApp.searchBy(type, value);
