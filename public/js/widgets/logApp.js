@@ -50,7 +50,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         // Default attributes for a log item.
         defaults: function () {
             return {
-                id: ''
+                uid: ''
                 , timestamp: ''
                 , type: ''              //error,warning,logs,asserts(enum)
                 , messageType: ''       //string,json,array,bool
@@ -177,6 +177,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
                 //var obj = document.getElementById('content'); //TODO
                 //obj.scrollTop = obj.scrollHeight - 50;
                 logModel.set({ count: this.count++ });
+                logModel.set({ uid: logModel.cid });
                 var view = new logView({ model: logModel });
                 var logAppend = view.render().el;
 
