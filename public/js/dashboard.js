@@ -2,7 +2,7 @@
  * Created dashboard pages
  * @Author Ankur Agarwal
  */
- if(typeof DFY == "undefined ") DFY = {};
+ if(typeof DFY == 'undefined') DFY = {};
 
 DFY.Dashboard = DFY.Dashboard || (function(w,d,$){
     

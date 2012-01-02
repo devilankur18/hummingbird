@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 /* test comment added */
-if(typeof DFY == "undefined ") DFY = {};
+if(typeof DFY == 'undefined') DFY = {};
 DFY.logApp = DFY.logApp || (function(w,d,$){
     
     //Class Definitions
@@ -179,7 +179,7 @@ DFY.logApp = DFY.logApp || (function(w,d,$){
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView;
             logAppViewObj.render();
-            var returnId = setInterval( "logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])",1000 );
+            var returnId = setInterval( "DFY.logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])",1000 );
 			
         });
     }
@@ -195,4 +195,4 @@ DFY.logApp = DFY.logApp || (function(w,d,$){
         , getConfig: getConfig
     }
 })(window, document, jQuery)
-logApp.init();
+DFY.logApp.init();
