@@ -54,7 +54,7 @@ DFY.logApp = DFY.logApp || (function(w,d,$){
                     , ip: ''
                 }
             }
-            , intialize:function(){
+            , intialize: function(){
 
             }
         });
