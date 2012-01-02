@@ -15,3 +15,31 @@ root {
     display: block;
 }
 
+
+.logContainer
+{
+	margin-top:20px;
+    
+    height:400px;
+    max-width: 100%;
+    background-color: #1C1C1C;
+    overflow: auto;
+}
+.error {
+    font-family: Lucida Console;
+    line-height: 25px;
+    font-size: 13px;
+    color: red;
+}
+.warning {
+    font-family: Lucida Console;
+    line-height: 25px;
+    font-size: 13px;
+    color: yellow;
+}
+.log {
+    font-family: Lucida Console;
+    line-height: 25px;
+    font-size: 13px;
+    color: green;
+}

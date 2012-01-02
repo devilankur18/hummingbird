@@ -10,6 +10,7 @@ and open the template in the editor.
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="./css/bootstrap.css">
+        <link rel="stylesheet" href="./css/dashboard.css">
         
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js" ></script>
@@ -24,7 +25,7 @@ and open the template in the editor.
         <script src="./js/bootstrap-dropdown.js"></script>
         <script src="./js/bootstrap-tabs.js"></script>
         <script src="./js/dashboard.js"></script>
-        <script src="./js/widgets/logApp.js"></script>
+        <script src="./js/widgets/logApp1.js"></script>
         
         
     </head>
@@ -78,8 +79,8 @@ and open the template in the editor.
                 <div id="showfilter"></div>
             </div>
             
-            <div class="content">
-            <div id="showlog"></div>
+            <div id="logapp" class="content">
+            <div id="showlog" class="logContainer"></div>
             </div>
         </div>
         
@@ -136,6 +137,11 @@ and open the template in the editor.
                     <div class="ua" style="display: inline"><%= userAgent %></div>
                     <div class="platform" style="display: inline"><%= platform %></div>
                  </div>
+         </script>
+
+         <script type="text/template" id="log-stats-template">
+            <div>Stats are as follows</div>
+                <label><b><input type="checkbox" id="tobottom" name="tobottom" value="true" checked/>UnCheck to prepend</b></label>
          </script>
        
         <script type="text/javascript">
