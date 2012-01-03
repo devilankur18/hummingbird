@@ -14,8 +14,12 @@
 root { 
     display: block;
 }
-
-
+.logdisplay{
+    font-family: Lucida Console;
+    line-height: 25px;
+    font-size: 11px;
+    color: white;
+}
 .logContainer
 {
 	margin-top:20px;
