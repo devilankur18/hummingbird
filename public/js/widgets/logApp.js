@@ -231,11 +231,65 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         })
     }
 
+    function searchGeneric(o) {
+        //  var tmp = o.JSON();
+        return logCollectionObj.filter(function (p) {
+            var flag = 1;
+            //console.log(o.timestamp);
+            //console.log(p.get("timestamp").getTime());
+            if ((o.messageTypes) && ((p.get("type") != o.messageTypes))) {
+                return false;
+            }
+            if ((o.from) && (!(p.get("timestamp").getTime() >= o.from))) {
+                return false;
+            }
+
+            if ((o.to) && (!(p.get("timestamp").getTime() <= o.to))) {
+                return false;
+            }
+
+            if ((o.moduleId) && ((p.get("moduleId") != o.moduleId))) {
+                return false;
+            }
+            
+            if((o.message)){
+                var isRegex =  o.isRegex ;
+                var isCaseSensitive = o.isCaseSensitive ;
+
+                if(isRegex){
+                    var patt =new RegExp(o.message,"gi");
+                    if (!(patt.test(p.get("message")))) {
+                        return false;
+                    }
+                }
+
+                else if(isCaseSensitive){
+                    var patt = new RegExp(o.message,"g");
+                    if (!(patt.test(p.get("message")))) {
+                        return false;
+                     }
+                }
+
+                else{
+                    var str = p.get("message");
+                    var patt = new RegExp(o.message,"g");
+                    if (!(str.search(patt))) {
+                        return false;
+                     }
+
+                }
+            }
+            return true;
+
+        })
+    }
+
     return {
         init: init
         , addData: addData
         , updateGlobal: updateGlobal
         , searchBy: searchBy
+        , searchGeneric: searchGeneric
     }
 })(window, document, jQuery, amplify)
 DFY.logApp.init();
