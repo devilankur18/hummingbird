@@ -4,7 +4,7 @@
  */
  if(typeof DFY == 'undefined') DFY = {};
 
- DFY.Dashboard = DFY.Dashboard || (function (w, d, $) {
+ DFY.Dashboard = DFY.Dashboard || (function (w, d, $, A) {
 
      // Model used to define the different types of message
      var messageTypeModel = Backbone.Model.extend({
@@ -23,17 +23,48 @@
      var messageTypeCollection = Backbone.Collection.extend({
          model: messageTypeModel
      })
+     
+    var messageTypeView = Backbone.View.extend({
+        el: false
+        
+        , template: false
+        
+        , messageTypeCollection: false
+        
+        , modelTemplate: false
+        
+        , collectionTemplate: false
+        
+        , events: {
+            'change input': 'handleChange'
+        }
+        
+        , handleChange: function (e) {
+            console.log(e);
+            var o = $(e.target);
+            var data = {};
+            data[o.attr('value')] = !!o.attr('checked');
+            A.publish('filter:messageType', data);
+        }
+        , initialize: function () {
+            this.modelTemplate =  _.template($('#messageTypeModel-template').html());
+            this.collectionTemplate =  _.template($('#messageTypeCollection-template').html());
+            this.$(this.el).html(this.collectionTemplate());
+            this.messageTypeCollection = new messageTypeCollection();
+            this.messageTypeCollection.bind('add', this.addOne, this);
+            this.messageTypeCollection.add(arguments[0].messageTypeCollection);
+        }
 
-
-     var messageTypes = new messageTypeCollection([
-        { name: 'log', title: 'Log' }
-        , { name: 'warning', title: 'Warning' }
-        , { name: 'error', title: 'Error' }
-        , { name: 'information', title: 'Information' }
-        , { name: 'assert', title: 'Assert' }
-        , { name: 'dump', title: 'Dump' }
-    ]);
-
+        , render: function () {
+            return this;
+        }
+        
+        , addOne: function(messageType){
+            this.$(this.el).append(this.modelTemplate(messageType.toJSON()));
+        }
+    })
+    
+    
      // Model used to manage user filters
      var filterModel = Backbone.Model.extend({
          defaults: {
@@ -56,19 +87,21 @@
          }
 
        , initialize: function () {
-           this.set({ messageTypes: messageTypes.toJSON() });
+//           this.set({messageTypes: messageTypes.toJSON()});
        }
      });
 
-     var filterModelObj = new filterModel();
+     
 
      var filterView = Backbone.View.extend({
          el: false
+         
+        , filterModel: false
+        
         , template: false
 
         , events: {
-
-            "keypress .search-input": "searchOnEnter"
+            'keypress .search-input': 'searchOnEnter'
           , 'change ul.messageTypes>li>label>input': 'hideMessage'
         }
 
@@ -82,7 +115,7 @@
         }
         , searchOnEnter: function (e) {
             if (e.keyCode == 13) {
-                // TODO
+                // TODO: Seach Logic on enter
                 var text = this.$('.search-input', this.el).val();
                 console.log('searching for ' + text);
             }
@@ -90,23 +123,34 @@
         , initialize: function (o) {
             console.log('Initialining filter View');
             this.template = _.template($('#filterModel-template').html());
-            $(document).bind('message:log',function(e){
-            console.log(e)
-            });
+            this.filterModel = arguments[0].filterModel;
         }
         , render: function () {
-            console.log(this.el);
-            console.log(filterModelObj);
-            a = filterModelObj;
-            this.el.html(this.template(filterModelObj.toJSON()));
+            var obj = this.filterModel.toJSON();
+            this.el.html(this.template(obj));
+            var messageTypeObj = new messageTypeView( {messageTypeCollection: obj.messageTypes});
+            this.$('.messageType').html( messageTypeObj.render().el);
         }
      })
 
      $(function () {
-         var filterViewObj = new filterView({ el: $('#showfilter') });
-         filterViewObj.render();
+        var messageTypes = new messageTypeCollection();
+        messageTypes.add([
+            {name: 'log', title: 'Log'}
+            , {name: 'warning', title: 'Warning'}
+            , {name: 'error', title: 'Error'}
+            , {name: 'information', title: 'Information'}
+            , {name: 'assert', title: 'Assert'}
+            , {name: 'dump', title: 'Dump'}
+        ]);
+        var filterModelObj = new filterModel( {messageTypes: messageTypes.toJSON() });
+        console.log(filterModelObj);
+        var filterViewObj = new filterView({el: $('#showfilter'), filterModel: filterModelObj});
+        filterViewObj.render();
+
+//        var a = new messageTypeView( {messageTypeCollection:messageTypes.toJSON()});
      });
 
- })(window, document, jQuery)
+ })(window, document, jQuery, amplify)
 
-var a;
+amplify.subscribe('filter:messageType', function(o){console.log(o)})

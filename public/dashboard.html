@@ -4,15 +4,22 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html>
+    
+        
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="./css/bootstrap.css">
         
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!--        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js" ></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js" ></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>-->
+
+        <script src="./js/jquery-1.7.js"></script>
+        <script src="./js/underscore-1.js"></script>
+        <script src="./js/backbone.js"></script>
+        <script src="./js/amplify.min.js"></script>
         
         <script src="./js/bootstrap-dropdown.js"></script>
         <script src="./js/bootstrap-tabs.js"></script>
@@ -114,25 +121,23 @@ and open the template in the editor.
                     </p> 
               </div>
                 
-            <div class="input">
-                <ul class="inputs-list messageTypes">
-                <%  for (var i = 0; i < messageTypes.length; i++) { %>
-                    <% var type = messageTypes[i]; %>
-                    <li>
-                      <label>
-                          <input type="checkbox" name="messageTypes" value="<%= type.name %>" <% if(type.enable){ %> checked="checked" <% } %> >
-                        <span><%= type.title %></span>
-                        <span><%= type.counter %></span>
-                      </label>
-                    </li>
-                <% } %>
-                </ul>
+            <div class="input messageType">
             </div>
                 
         </div>
         </script>
+        <script type="text/template" id="messageTypeCollection-template">
+            <ul class="inputs-list">
+            </ul>
+        </script>
         
         <script type="text/template" id="messageTypeModel-template">
+            <li>
+                <label>
+                  <input type="checkbox" name="messageTypes" value="<%= name %>" <% if(enable){ %> checked="checked" <% } %> >
+                <span><%= title %></span>
+              </label>
+            </li>
         </script>
         
         <script type="text/javascript">
@@ -141,5 +146,6 @@ and open the template in the editor.
                 $('.tabs').tabs()
               })
         </script>
+        
     </body>
 </html>
