@@ -4,7 +4,7 @@
  */
 /* test comment added */
 if(typeof DFY == 'undefined') DFY = {};
-DFY.logApp = DFY.logApp || (function (w, d, $) {
+DFY.logApp = DFY.logApp || (function (w, d, $, A) {
 
     //Class Definitions
     var logModel;
@@ -48,152 +48,154 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
         config = $.extend({}, defaults, config, o);
     }
 
-    function logApp() {
 
-        //Basic Log Model 
-        logModel = Backbone.Model.extend({
+    //Basic Log Model 
+    logModel = Backbone.Model.extend({
 
-            // Default attributes for a log item.
-            defaults: function () {
-                return {
-                    id: ''
-                    , timestamp: ''
-                    , type: ''              //error,warning,logs,asserts(enum)
-                    , messageType: ''       //string,json,array,bool
-                    , message: ''
-                    , moduleId: ''          //Module id
-                    , platform: ''          //php,JS
-                    , appId: ''             //key corresponding user
-                    // userId not needed from user
-                    , userAgent: ''         //will be enum value from server
-                    , ip: ''
+        // Default attributes for a log item.
+        defaults: function () {
+            return {
+                id: ''
+                , timestamp: ''
+                , type: ''              //error,warning,logs,asserts(enum)
+                , messageType: ''       //string,json,array,bool
+                , message: ''
+                , moduleId: ''          //Module id
+                , platform: ''          //php,JS
+                , appId: ''             //key corresponding user
+                // userId not needed from user
+                , userAgent: ''         //will be enum value from server
+                , ip: ''
+            }
+        }
+        , intialize: function () {
+
+        }
+    });
+
+    // Managing the different User Agents.
+    // To evaluate Browser, Browser version, OS etc
+    userAgentModel = Backbone.Model.extend({
+        defaults: {
+
+        }
+    });
+
+    //Collection of logModel
+    logCollection = Backbone.Collection.extend({
+        // Reference to this collection's model.
+        model: logModel
+    });
+
+    // Create our global collection of **Logs**.
+    logCollectionObj = new logCollection;
+
+    // Log Item View
+    // --------------
+
+    // The DOM element for a log item...
+    logView = Backbone.View.extend({
+
+        // Cache the template function for a single item.
+        template: false
+
+
+        // The logView listens for changes to its model, re-rendering.
+        , initialize: function () {
+            this.logtemplate = _.template($('#logModel-template').html());
+        }
+
+        // Re-render the contents of the log item.
+        , render: function () {
+            $(this.el).html(this.logtemplate(this.model.toJSON()));
+            return this;
+        }
+    });
+
+    // The Application
+    // ---------------
+
+    // Our overall **AppView** is the top-level piece of UI.
+    logAppView = Backbone.View.extend({
+
+        // Instead of generating a new element, bind to the existing skeleton of
+        // the App already present in the HTML.
+        el: false
+
+        , events: {
+            "change #tobottom": "topToBottom"
+        }
+
+        , subscribe: function () {
+            A.subscribe('filter:messageType', function(){
+
+            })
+        }
+
+        , topToBottom: function (e) {
+            config['topToBottom'] = e.currentTarget.checked;
+        }
+
+
+
+        // At initialization we bind to the relevant events on the `logCollection`
+        // collection, when items are added or changed. Kick things off by
+        // loading any preexisting todos that might be saved in *localStorage*.
+        , initialize: function () {
+            logCollectionObj.bind('add', this.addOne, this);
+            this.template = _.template($('#log-stats-template').html());
+            this.$('.check', this.el).html(this.template());
+
+        }
+
+        // Re-rendering the App just means refreshing the statistics -- the rest
+        // of the app doesn't change.
+        , render: function () {
+            return this;
+        }
+
+        // Add a single log item to the list by creating a view for it, 
+        , count: 1
+
+        , addOne: function (logModel) {
+
+            setCounter(logModel.get("type"));
+            if (config[logModel.get("type")]) {
+                //var obj = document.getElementById('content'); //TODO
+                //obj.scrollTop = obj.scrollHeight - 50;
+                logModel.set({ count: this.count++ });
+                var view = new logView({ model: logModel });
+                var logAppend = view.render().el;
+
+                //$(logAppend).slideUp();
+                //console.log($(logAppend).height());
+                if (config['topToBottom']) {
+                    this.$('.logContainer').append(logAppend);
                 }
-            }
-            , intialize: function () {
-
-            }
-        });
-
-        // Managing the different User Agents.
-        // To evaluate Browser, Browser version, OS etc
-        userAgentModel = Backbone.Model.extend({
-            defaults: {
-
-            }
-        });
-
-        //Collection of logModel
-        logCollection = Backbone.Collection.extend({
-            // Reference to this collection's model.
-            model: logModel
-        });
-
-        // Create our global collection of **Logs**.
-        logCollectionObj = new logCollection;
-
-        // Log Item View
-        // --------------
-
-        // The DOM element for a log item...
-        logView = Backbone.View.extend({
-
-            // Cache the template function for a single item.
-            template: false
-
-
-            // The logView listens for changes to its model, re-rendering.
-            , initialize: function () {
-                this.logtemplate = _.template($('#logModel-template').html());
-            }
-
-            // Re-render the contents of the log item.
-            , render: function () {
-                $(this.el).html(this.logtemplate(this.model.toJSON()));
-                return this;
-            }
-        });
-
-        // The Application
-        // ---------------
-
-        // Our overall **AppView** is the top-level piece of UI.
-        logAppView = Backbone.View.extend({
-
-            // Instead of generating a new element, bind to the existing skeleton of
-            // the App already present in the HTML.
-            el: false
-
-            , events: {
-                "change #tobottom": "topToBottom"
-            }
-
-            , topToBottom: function (e) {
-                config['topToBottom'] = e.currentTarget.checked;
-            }
-            //            , counter: {
-
-
-            // At initialization we bind to the relevant events on the `logCollection`
-            // collection, when items are added or changed. Kick things off by
-            // loading any preexisting todos that might be saved in *localStorage*.
-            , initialize: function () {
-                logCollectionObj.bind('add', this.addOne, this);
-                this.template = _.template($('#log-stats-template').html());
-                this.$('.check', this.el).html(this.template());
-
-            }
-
-            // Re-rendering the App just means refreshing the statistics -- the rest
-            // of the app doesn't change.
-            , render: function () {
-                return this;
-            }
-
-            // Add a single log item to the list by creating a view for it, 
-            , count: 1
-
-            , addOne: function (logModel) {
-
-                setCounter(logModel.get("type"));
-                if (config[logModel.get("type")]) {
-                    //var obj = document.getElementById('content'); //TODO
-                    //obj.scrollTop = obj.scrollHeight - 50;
-                    logModel.set({ count: this.count++ });
-                    var view = new logView({ model: logModel });
-                    var logAppend = view.render().el;
-
-                    //$(logAppend).slideUp();
-                    //console.log($(logAppend).height());
-                    if (config['topToBottom']) {
-                        this.$('.logContainer').append(logAppend);
-                    }
-                    else {
-                        this.$('.logContainer').prepend(logAppend);
-                    }
-
-                    $(logAppend).hide().slideDown();
-                    //console.log($(logAppend).height());
+                else {
+                    this.$('.logContainer').prepend(logAppend);
                 }
-            }
-            , removeOne: function (idx) {
 
-                $('#' + idx).empty();
+                $(logAppend).hide().slideDown();
+                //console.log($(logAppend).height());
             }
+        }
+        , removeOne: function (idx) {
 
-            // Add all items in the **Logs** collection at once.
-            , addAll: function () {
-                logCollectionObj.each(this.addOne);
-            }
-        });
-    }
+            $('#' + idx).empty();
+        }
+
+        // Add all items in the **Logs** collection at once.
+        , addAll: function () {
+            logCollectionObj.each(this.addOne);
+        }
+    });
 
     function init(o) {
 
         setConfig(o);
         //Attach functions to be executed at ready Event Handler
         $(document).ready(function () {
-            logApp();
-
             // Finally, we kick things off by creating the **App**.
             logAppViewObj = new logAppView({ el: $("#logapp") });
 
@@ -215,5 +217,5 @@ DFY.logApp = DFY.logApp || (function (w, d, $) {
         , getCounter: getCounter
         , setCounter: setCounter
     }
-})(window, document, jQuery)
+})(window, document, jQuery, amplify)
 DFY.logApp.init();
