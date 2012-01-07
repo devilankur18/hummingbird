@@ -40,15 +40,6 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         topToBottom: false
     };
 
-    function getConfig(o) {
-        return config;
-    }
-
-    function setConfig(o) {
-        config = $.extend({}, defaults, config, o);
-    }
-
-
     //Basic Log Model 
     logModel = Backbone.Model.extend({
 
@@ -126,10 +117,13 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
             error: true
             , warning: true
             , log: true
+            ,topToBottom: false
         }
         
-        , config: {
-            
+        , config: {}
+        
+        , setConfig: function (o) {
+            this.config = $.extend( {}, this.defaults, this.config, o);
         }
         
         , events: {
@@ -137,13 +131,14 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         }
 
         , subscribe: function () {
-            A.subscribe('filter:messageType', function(){
-//                setConfig();
+            var that = this;
+            A.subscribe('filter:messageType', function(o){
+                that.setConfig(o);
             })
         }
 
         , topToBottom: function (e) {
-            config['topToBottom'] = e.currentTarget.checked;
+            this.config['topToBottom'] = e.currentTarget.checked;
         }
 
 
@@ -152,6 +147,8 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         // collection, when items are added or changed. Kick things off by
         // loading any preexisting todos that might be saved in *localStorage*.
         , initialize: function () {
+            this.setConfig(arguments[0].config);
+            this.subscribe();
             logCollectionObj.bind('add', this.addOne, this);
             this.template = _.template($('#log-stats-template').html());
             this.$('.check', this.el).html(this.template());
@@ -170,7 +167,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         , addOne: function (logModel) {
 
             setCounter(logModel.get("type"));
-            if (config[logModel.get("type")]) {
+            if (this.config[logModel.get("type")]) {
                 //var obj = document.getElementById('content'); //TODO
                 //obj.scrollTop = obj.scrollHeight - 50;
                 logModel.set({count: this.count++});
@@ -179,7 +176,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
 
                 //$(logAppend).slideUp();
                 //console.log($(logAppend).height());
-                if (config['topToBottom']) {
+                if (this.config['topToBottom']) {
                     this.$('.logContainer').append(logAppend);
                 }
                 else {
@@ -203,7 +200,6 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
 
     function init(o) {
 
-        setConfig(o);
         //Attach functions to be executed at ready Event Handler
         $(document).ready(function () {
             // Finally, we kick things off by creating the **App**.
@@ -222,8 +218,6 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
     return {
         init: init
         , addData: addData
-        , setConfig: setConfig
-        , getConfig: getConfig
     }
 })(window, document, jQuery, amplify)
 DFY.logApp.init();
