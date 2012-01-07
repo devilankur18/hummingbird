@@ -121,14 +121,24 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         // Instead of generating a new element, bind to the existing skeleton of
         // the App already present in the HTML.
         el: false
-
+        
+        , defaults: {
+            error: true
+            , warning: true
+            , log: true
+        }
+        
+        , config: {
+            
+        }
+        
         , events: {
             "change #tobottom": "topToBottom"
         }
 
         , subscribe: function () {
             A.subscribe('filter:messageType', function(){
-
+//                setConfig();
             })
         }
 
@@ -163,8 +173,8 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
             if (config[logModel.get("type")]) {
                 //var obj = document.getElementById('content'); //TODO
                 //obj.scrollTop = obj.scrollHeight - 50;
-                logModel.set({ count: this.count++ });
-                var view = new logView({ model: logModel });
+                logModel.set({count: this.count++});
+                var view = new logView({model: logModel});
                 var logAppend = view.render().el;
 
                 //$(logAppend).slideUp();
@@ -197,7 +207,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         //Attach functions to be executed at ready Event Handler
         $(document).ready(function () {
             // Finally, we kick things off by creating the **App**.
-            logAppViewObj = new logAppView({ el: $("#logapp") });
+            logAppViewObj = new logAppView({el: $("#logapp")});
 
             logAppViewObj.render();
             var returnId = setInterval("DFY.logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])", 1000);
@@ -214,8 +224,6 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
         , addData: addData
         , setConfig: setConfig
         , getConfig: getConfig
-        , getCounter: getCounter
-        , setCounter: setCounter
     }
 })(window, document, jQuery, amplify)
 DFY.logApp.init();
