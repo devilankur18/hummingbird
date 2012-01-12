@@ -2,58 +2,69 @@ var http = require('http'),
   weekly = require('./lib/weekly'),
   config = require('./config/config'),
   dgram = require('dgram'),
-  static = require('node-static'),
+  sserver = require('node-static'),
   sio = require('socket.io'),
   mongo = require('mongodb'),
   Hummingbird = require('./lib/hummingbird').Hummingbird;
 
-db = new mongo.Db('hummingbird', new mongo.Server(config.mongo_host, config.mongo_port, {}), {});
+console.log(process.env);
 
-db.addListener("error", function(error) {
-  console.log("Error connecting to mongo -- perhaps it isn't running?");
-});
+if(config.enable_tracking) {
 
-db.open(function(p_db) {
-  var hummingbird = new Hummingbird();
-  hummingbird.init(db, function() {
-    var server = http.createServer(function(req, res) {
-      try {
-        hummingbird.serveRequest(req, res);
-      } catch(e) {
-        hummingbird.handleError(req, res, e);
-      }
+    //Initializing mongo object
+    db = new mongo.Db(config.mongo_db, new mongo.Server(config.mongo_host, config.mongo_port, {}), {});
+
+    db.addListener("error", function(error) {
+      console.log("Error connecting to mongo -- perhaps it isn't running?");
     });
-    server.listen(config.tracking_port, "0.0.0.0");
 
-    io = sio.listen(server);
-    io.set('log level', 2);
+    //Run Server to start tracking
+    db.open(function(p_db) {
 
-    hummingbird.io = io;
-    hummingbird.addAllMetrics(io, db);
+    db.authenticate(config.mongo_user, config.mongo_pass, function(err, db) {
+      console.log(err, db);
+    });
+      var hummingbird = new Hummingbird();
+      hummingbird.init(db, function() {
+        var server = http.createServer(function(req, res) {
+          try {
+            hummingbird.serveRequest(req, res);
+          } catch(e) {
+            hummingbird.handleError(req, res, e);
+          }
+        });
+        server.listen(config.tracking_port, config.tracking_ip);
 
-    console.log('Web Socket server running at ws://*:' + config.tracking_port);
+        io = sio.listen(server);
+        io.set('log level', config.log_level);
 
-    if(config.udp_address) {
-      var udpServer = dgram.createSocket("udp4");
+        hummingbird.io = io;
+        hummingbird.addAllMetrics(io, db);
 
-      udpServer.on("message", function(message, rinfo) {
-        console.log("message from " + rinfo.address + " : " + rinfo.port);
+        console.log('Web Socket server running at ws://*:' + config.tracking_port);
 
-        var data = JSON.parse(message);
-        hummingbird.insertData(data);
+        if(config.udp_address) {
+          var udpServer = dgram.createSocket("udp4");
+
+          udpServer.on("message", function(message, rinfo) {
+            console.log("message from " + rinfo.address + " : " + rinfo.port);
+
+            var data = JSON.parse(message);
+            hummingbird.insertData(data);
+          });
+
+          udpServer.bind(config.udp_port, config.udp_address);
+
+          console.log('UDP server running on UDP port ' + config.udp_port);
+        }
       });
 
-      udpServer.bind(config.udp_port, config.udp_address);
-
-      console.log('UDP server running on UDP port ' + config.udp_port);
-    }
-  });
-
-  console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
-});
-
+      console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
+    });
+}
+//Run Server to show Dashboard
 if(config.enable_dashboard) {
-  var file = new(static.Server)('./public');
+  var file = new(sserver.Server)('./public');
 
   http.createServer(function (request, response) {
     request.addListener('end', function () {
