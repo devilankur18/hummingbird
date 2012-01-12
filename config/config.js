@@ -37,7 +37,7 @@ module.exports = config = {
   "mongo_pass" : mongo.password,
 
   "enable_dashboard" : true,
-  "enable_tracking" : true,
+  "enable_tracking" : false,
 
   //Logging Level
   "log_level" : 2,
