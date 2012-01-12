@@ -1,5 +1,6 @@
 var mongo = false;
 var e = process.env;
+//console.log(e);
 try{
     if(e.VCAP_SERVICES && e.VCAP_SERVICES.length > 0){
      var services = JSON.parse(e.VCAP_SERVICES);
@@ -27,7 +28,7 @@ module.exports = config = {
   
   //Config for running socket.io UDP server
   "udp_address" : "127.0.0.1",
-  "udp_port" : port || 8080,
+  "udp_port" : port || 8000,
   
   //Mongo Database configuration
   "mongo_host" : mongo.hostname,
@@ -36,8 +37,8 @@ module.exports = config = {
   "mongo_user" : mongo.username,
   "mongo_pass" : mongo.password,
 
-  "enable_dashboard" : true,
-  "enable_tracking" : false,
+  "enable_dashboard" : e.DASHBOARD_ENABLE,
+  "enable_tracking" : e.TRACKING_ENABLE,
 
   //Logging Level
   "log_level" : 2,

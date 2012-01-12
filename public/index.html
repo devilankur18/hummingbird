@@ -9,12 +9,13 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>
-
+    
+    <script src="http://cdn.sockjs.org/sockjs-0.1.min.js"></script>
     <script src="http://localhost:8000/socket.io/socket.io.js"></script>
     <script>
     WEB_SOCKET_SWF_LOCATION = 'http://localhost:8000/socket.io/WebSocketMain.swf';
     </script>
-
+    
     <script src="/js/helpers.js"></script>
 
     <script src="/js/websocket.js"></script>
@@ -38,6 +39,18 @@
 
 <body>
 
+<script>
+   var sock = new SockJS('http://debuggify.cloudfoundry.com');
+   sock.onopen = function() {
+       console.log('open');
+   };
+   sock.onmessage = function(e) {
+       console.log('message', e.data);
+   };
+   sock.onclose = function() {
+       console.log('close');
+   };
+</script>
   <h1>Hummingbird</h1>
 
   <div class="hummingbird_graph" id="total">

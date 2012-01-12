@@ -7,9 +7,9 @@ var http = require('http'),
   mongo = require('mongodb'),
   Hummingbird = require('./lib/hummingbird').Hummingbird;
 
-console.log(process.env);
-
-if(config.enable_tracking) {
+//console.log(process.env);
+console.log(config);
+if(config.enable_tracking && config.enable_tracking != 'false') {
 
     //Initializing mongo object
     db = new mongo.Db(config.mongo_db, new mongo.Server(config.mongo_host, config.mongo_port, {}), {});
@@ -63,7 +63,7 @@ if(config.enable_tracking) {
     });
 }
 //Run Server to show Dashboard
-if(config.enable_dashboard) {
+if(config.enable_dashboard && config.enable_dashboard != 'false') {
   var file = new(sserver.Server)('./public');
 
   http.createServer(function (request, response) {
