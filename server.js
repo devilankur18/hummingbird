@@ -37,6 +37,7 @@ if(config.enable_tracking && config.enable_tracking != 'false') {
 
         io = sio.listen(server);
         io.set('log level', config.log_level);
+        io.set('transports', config.transports);
 
         hummingbird.io = io;
         hummingbird.addAllMetrics(io, db);

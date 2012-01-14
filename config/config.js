@@ -42,6 +42,15 @@ module.exports = config = {
 
   //Logging Level
   "log_level" : 2,
+  
+  "transports": [
+    //'websocket',
+    'flashsocket',
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling'
+  ],
+  
 
   "capistrano" : {
     "repository" :       "git://github.com/devilankur18/hummingbird.git",
