@@ -16,6 +16,7 @@ var dport = false;
 port = e.VCAP_APP_PORT;
 dport = e.VCAP_APP_PORT;
 
+
 module.exports = config = {
   "name" : "Hummingbird",
   
@@ -41,7 +42,7 @@ module.exports = config = {
   "enable_tracking" : e.TRACKING_ENABLE,
 
   //Logging Level
-  "log_level" : 2,
+  "log_level" : e.LOG_LEVEL || 2,
   
   "transports": [
     //'websocket',
