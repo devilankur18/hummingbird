@@ -10,7 +10,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js" ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js" ></script>
     
-    <script src="http://cdn.sockjs.org/sockjs-0.1.min.js"></script>
+<!--    <script src="http://cdn.sockjs.org/sockjs-0.1.min.js"></script>-->
     <script src="http://trackkify.cloudfoundry.com/socket.io/socket.io.js"></script>
     <script>
     WEB_SOCKET_SWF_LOCATION = 'http://trackkify.cloudfoundry.com/socket.io/WebSocketMain.swf';
@@ -40,16 +40,16 @@
 <body>
 
 <script>
-   var sock = new SockJS('http://debuggify.cloudfoundry.com');
-   sock.onopen = function() {
-       console.log('open');
-   };
-   sock.onmessage = function(e) {
-       console.log('message', e.data);
-   };
-   sock.onclose = function() {
-       console.log('close');
-   };
+//   var sock = new SockJS('http://debuggify.cloudfoundry.com');
+//   sock.onopen = function() {
+//       console.log('open');
+//   };
+//   sock.onmessage = function(e) {
+//       console.log('message', e.data);
+//   };
+//   sock.onclose = function() {
+//       console.log('close');
+//   };
 </script>
   <h1>Hummingbird</h1>
 

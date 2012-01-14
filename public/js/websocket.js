@@ -63,6 +63,7 @@ Hummingbird.WebSocket.prototype = {
     } else {
       var wsServer = document.location.hostname;
     }
+    wsServer = 'trackkify.cloudfoundry.com';
     return wsServer;
   },
 
@@ -71,7 +72,8 @@ Hummingbird.WebSocket.prototype = {
       var wsPortParam = document.location.search.match(/ws_port=([^\&\#]+)/) || [];
       return wsPortParam;
     }
-    return 8000;
+    wsPortParam = 80;
+    return wsPortParam;
   }
 }
 
