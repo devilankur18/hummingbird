@@ -215,7 +215,7 @@ DFY.logApp = DFY.logApp || (function (w, d, $, A) {
             logAppViewObj = new logAppView({ el: $("#logapp") });
 
             logAppViewObj.render();
-            var returnId = setInterval("DFY.logApp.addData([{id:1,timestamp:new  Date,type:'log',message:'This is log'},{id:2,timestamp:new  Date,type:'error',message:'This is error'},{id:3,timestamp:new  Date,type:'warning',message:'This is warning'}])", 1000);
+            var returnId = setInterval("DFY.logApp.addData(generateRandomTestData())", 3000);
 
         });
     }

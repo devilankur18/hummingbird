@@ -24,8 +24,10 @@ and open the template in the editor.
         
         <script src="./js/bootstrap-dropdown.js"></script>
         <script src="./js/bootstrap-tabs.js"></script>
+        <script src="./js/helper.js"></script>
         <script src="./js/dashboard.js"></script>
         <script src="./js/widgets/logApp.js"></script>
+        
         
         
     </head>
@@ -132,12 +134,13 @@ and open the template in the editor.
         </script>
         
         <script type="text/template" id="logModel-template">
-                <div class="<%= type %>">
-                    <div class="ip" style="display: inline">[<%= timestamp %>]</div>
+                <div class="logdisplay">
+                    <div class="ip" style="display: inline">[<%= ip %>]</div>
+                    <div class="<%= type %>" style="display: inline"><%= type %>: </div>
                     <div class="<%= type %>" style="display: inline"><%= message %></div>
                     <div class="ua" style="display: inline"><%= userAgent %></div>
                     <div class="platform" style="display: inline"><%= platform %></div>
-                    <div class="id" style="display: inline"><%= uid %></div>
+                    <div class="messageType" style="display: inline"><%= messageType %></div>
                  </div>
          </script>
 
